@@ -658,6 +658,7 @@ class GeoVector:
         return self.__sub__(other)
 
     def __cmp__(self, other):
+        # Does not work on python 3
         return compare(self.magnitude, other.magnitude)
 
     def __pos__(self):
