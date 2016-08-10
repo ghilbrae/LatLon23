@@ -28,8 +28,23 @@ Author: Gen Del Raye
 '''
 # TODO: Write methods to convert -180 to 180 longitudes to 0 to 360 and vice versa
 
-def compare(a, b):
+def comparesign(a, b):
     return (a > b) - (a < b)
+
+def compare(a, b, comparison):
+    # compare
+    if comparison == 'lt':
+        return a < b
+    elif comparison == 'le':
+        return a <= b
+    elif comparison == 'gt':
+        return a > b
+    elif comparison == 'ge':
+        return a >= b
+    elif comparison == 'eq':
+        return a == b
+    elif comparison == 'ne':
+        return a != b
 
 class GeoCoord:
     '''
@@ -74,7 +89,7 @@ class GeoCoord:
         '''
         Calculate degree, minute second from decimal degree
         '''
-        sign = compare(decimal_degree, 0) # Store whether the coordinate is negative or positive
+        sign = comparesign(decimal_degree, 0) # Store whether the coordinate is negative or positive
         decimal_degree = abs(decimal_degree)
         degree = decimal_degree//1 # Truncate degree to be an integer
         decimal_minute = (decimal_degree - degree)*60. # Calculate the decimal minutes
@@ -138,8 +153,27 @@ class GeoCoord:
             coord_str = coord_str.replace('-', '')
         return coord_str
 
-    def __cmp__(self, other):
-        return compare(self.decimal_degree, other.decimal_degree)
+    # def __cmp__(self, other):
+    #     # Not working on python 3
+    #     return compare(self.decimal_degree, other.decimal_degree)
+
+    def __lt__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'lt')
+
+    def __le__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'le')
+
+    def __gt__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'gt')
+
+    def __ge__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'ge')
+
+    def __eq__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'eq')
+
+    def __ne__(self, other):
+        return compare(self.decimal_degree, other.decimal_degree, 'ne')
 
     def __neg__(self):
         return GeoCoord(-self.decimal_degree)
@@ -657,9 +691,27 @@ class GeoVector:
         # other is a GeoVector object
         return self.__sub__(other)
 
-    def __cmp__(self, other):
-        # Does not work on python 3
-        return compare(self.magnitude, other.magnitude)
+    # def __cmp__(self, other):
+    #     # Does not work on python 3
+    #     return compare(self.magnitude, other.magnitude)
+
+    def __lt__(self, other):
+        return compare(self.magnitude, other.magnitude, 'lt')
+
+    def __le__(self, other):
+        return compare(self.magnitude, other.magnitude, 'le')
+
+    def __gt__(self, other):
+        return compare(self.magnitude, other.magnitude, 'gt')
+
+    def __ge__(self, other):
+        return compare(self.magnitude, other.magnitude, 'ge')
+
+    def __eq__(self, other):
+        return compare(self.magnitude, other.magnitude, 'eq')
+
+    def __ne__(self, other):
+        return compare(self.magnitude, other.magnitude, 'ne')
 
     def __pos__(self):
         return GeoVector(self.dx, self.dy)
